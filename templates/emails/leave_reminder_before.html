@@ -1,0 +1,20 @@
+<html>
+
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #ffc107;">Your Leave Starts Tomorrow!</h2>
+
+        <p>Hi {{ employee_name }},</p>
+
+        <p>This is a reminder that your approved leave starts tomorrow:</p>
+
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
+            <p><strong>Leave Type:</strong> {{ leave_type }}</p>
+            <p><strong>Duration:</strong> {{ start_date|date:"F d" }} - {{ end_date|date:"F d, Y" }}</p>
+        </div>
+
+        <p>Please ensure you have completed all pending work and briefed your team before you leave.</p>
+    </div>
+</body>
+
+</html>

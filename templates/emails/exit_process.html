@@ -1,0 +1,35 @@
+<html>
+
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #dc3545;">Exit Process - Offboarding Checklist</h2>
+
+        <p>Hi {{ employee_name }},</p>
+
+        <p>As we transition your departure from the organization, please ensure the following items are completed by
+            your last working day:</p>
+
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
+            <p><strong>Last Working Day:</strong> {{ last_working_day|date:"F d, Y" }}</p>
+        </div>
+
+        <div style="background-color: #fff3cd; padding: 20px; border-radius: 5px; margin: 20px 0;">
+            <h4>Offboarding Checklist:</h4>
+            {% if checklist_items %}
+            <ul style="list-style: none; padding: 0;">
+                {% for item in checklist_items %}
+                <li style="padding: 8px 0; border-bottom: 1px solid #ffeaa7;">
+                    ☐ {{ item.task }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No checklist items defined yet.</p>
+            {% endif %}
+        </div>
+
+        <p>Please coordinate with your manager and HR to ensure a smooth transition.</p>
+    </div>
+</body>
+
+</html>

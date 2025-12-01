@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Manager Dashboard - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4"> Manager Dashboard</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-muted">Team Size</h6>
+                    <h2 class="text-primary">{{ subordinates.count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-muted">Pending Leave Requests</h6>
+                    <h2 class="text-warning">{{ pending_leaves.count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-muted">Quick Actions</h6>
+                    <a href="{% url 'attendance_report' %}" class="btn btn-sm btn-outline-primary">Team Attendance</a>
+                    <a href="{% url 'leave_requests' %}" class="btn btn-sm btn-outline-warning">Review Leaves</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Pending Leave Requests</h5>
+                </div>
+                <div class="card-body">
+                    {% if pending_leaves %}
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Type</th>
+                                <th>Dates</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for leave in pending_leaves %}
+                            <tr>
+                                <td>{{ leave.employee.get_full_name }}</td>
+                                <td>{{ leave.leave_type.name }}</td>
+                                <td>{{ leave.start_date|date:"M d" }} - {{ leave.end_date|date:"M d" }}</td>
+                                <td>
+                                    <a href="{% url 'approve_leave' leave.id %}" class="btn btn-sm btn-success">✓</a>
+                                    <a href="{% url 'reject_leave' leave.id %}" class="btn btn-sm btn-danger">✗</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">No pending leave requests.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Team Members</h5>
+                </div>
+                <div class="card-body">
+                    {% if subordinates %}
+                    <ul class="list-group">
+                        {% for sub in subordinates %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>{{ sub.get_full_name }}</span>
+                            <small class="text-muted">{{ sub.employee_profile.employee_id }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">No team members assigned.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

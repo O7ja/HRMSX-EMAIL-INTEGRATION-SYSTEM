@@ -1,0 +1,23 @@
+<html>
+
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #dc3545;">Your Leave Request Has Been Rejected</h2>
+
+        <p>Hi {{ employee_name }},</p>
+
+        <p>Unfortunately, your leave request has been rejected.</p>
+
+        <div
+            style="background-color: #f8d7da; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #dc3545;">
+            <p><strong>Leave Type:</strong> {{ leave_type }}</p>
+            <p><strong>Start Date:</strong> {{ start_date|date:"F d, Y" }}</p>
+            <p><strong>End Date:</strong> {{ end_date|date:"F d, Y" }}</p>
+            <p><strong>Reason for Rejection:</strong> {{ rejection_reason|default:"Not provided" }}</p>
+        </div>
+
+        <p>You can submit a new leave request if needed. Please contact your manager for further clarification.</p>
+    </div>
+</body>
+
+</html>

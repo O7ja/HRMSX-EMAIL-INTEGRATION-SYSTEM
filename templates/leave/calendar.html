@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Leave Calendar - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"> Leave Calendar</h2>
+
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Approved Leave Schedule</h5>
+        </div>
+        <div class="card-body">
+            {% if leaves %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Employee</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Duration</th>
+                            <th>Leave Type</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for leave in leaves %}
+                        <tr>
+                            <td>
+                                <strong>{{ leave.employee.get_full_name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ leave.employee.username }}</small>
+                            </td>
+                            <td>{{ leave.start_date|date:"M d, Y" }}</td>
+                            <td>{{ leave.end_date|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="badge bg-primary">
+                                    {{ leave.duration }} days
+                                </span>
+                            </td>
+                            <td>{{ leave.leave_type.name }}</td>
+                            <td>{{ leave.reason }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-calendar-check"></i> No approved leaves to display.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'leave_requests' %}" class="btn btn-primary"> View Leave Requests</a>
+        <a href="{% url 'leave_balance' %}" class="btn btn-success">⏱ Check Balance</a>
+    </div>
+</div>
+
+<style>
+    .table-responsive {
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Leave Requests - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"> Leave Requests</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="get" class="d-flex gap-2">
+                <select name="status" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Statuses</option>
+                    <option value="pending" {% if is_pending %}selected{% endif %}>Pending</option>
+                    <option value="approved" {% if is_approved %}selected{% endif %}>Approved</option>
+                    <option value="rejected" {% if is_rejected %}selected{% endif %}>Rejected</option>
+                </select>
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            {% if user.role_profile.role == 'employee' %}
+            <a href="{% url 'request_leave' %}" class="btn btn-primary"> New Leave Request</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% if page_obj %}
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Employee</th>
+                        <th>Type</th>
+                        <th>Duration</th>
+                        <th>Dates</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in page_obj %}
+                    <tr>
+                        <td>{{ leave.employee.get_full_name }}</td>
+                        <td>{{ leave.leave_type.name }}</td>
+                        <td>{{ leave.get_duration_days }} days</td>
+                        <td>{{ leave.start_date|date:"M d" }} - {{ leave.end_date|date:"M d, Y" }}</td>
+                        <td>
+                            {% if leave.status == 'pending' %}
+                            <span class="badge bg-warning">Pending</span>
+                            {% elif leave.status == 'approved' %}
+                            <span class="badge bg-success">✓ Approved</span>
+                            {% elif leave.status == 'rejected' %}
+                            <span class="badge bg-danger">✗ Rejected</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ leave.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if leave.status == 'pending' and user.role_profile.role in 'manager,hr' %}
+                            <a href="{% url 'approve_leave' leave.id %}" class="btn btn-sm btn-success">✓</a>
+                            <a href="{% url 'reject_leave' leave.id %}" class="btn btn-sm btn-danger">✗</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <p class="text-muted text-center py-4">No leave requests found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

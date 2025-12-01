@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit Self-Assessment - HRMSX EMAIL INTEGRATION SYSTEM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="mb-2">Performance Self-Assessment</h1>
+            <p class="text-muted mb-4">{{ cycle.name }} | Period: {{ cycle.start_date|date:"M d, Y" }} - {{
+                cycle.end_date|date:"M d, Y" }}</p>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Self-Assessment Submission</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-4">
+                        <strong>Deadline:</strong> {{ review.submission_deadline|date:"M d, Y" }}
+                        {% if review.days_until_deadline >= 0 %}
+                        ({{ review.days_until_deadline }} days remaining)
+                        {% else %}
+                        <span class="badge bg-danger">OVERDUE</span>
+                        {% endif %}
+                    </div>
+
+                    {% if cycle.guidelines %}
+                    <div class="alert alert-light border mb-4">
+                        <h6 class="mb-2">Review Guidelines:</h6>
+                        <p class="mb-0">{{ cycle.guidelines|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if cycle.criteria %}
+                    <div class="alert alert-light border mb-4">
+                        <h6 class="mb-2">Evaluation Criteria:</h6>
+                        <p class="mb-0">{{ cycle.criteria|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label for="id_assessment_content" class="form-label">
+                                <strong>Your Self-Assessment</strong>
+                            </label>
+                            {{ form.assessment_content }}
+                            {% if form.assessment_content.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.assessment_content.errors }}
+                            </div>
+                            {% endif %}
+                            <small class="form-text text-muted d-block mt-2">
+                                Please provide a comprehensive self-assessment covering:
+                                <ul class="mt-2">
+                                    <li>Key accomplishments during this period</li>
+                                    <li>Challenges faced and how you overcame them</li>
+                                    <li>Areas for growth and improvement</li>
+                                    <li>Goals and aspirations for the next period</li>
+                                </ul>
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                            <a href="{% url 'employee_reviews' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Submit Assessment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+<h2>Meeting Confirmed</h2>
+<p>Your performance review meeting for <strong>{{ cycle.name }}</strong> is scheduled.</p>
+<ul>
+    <li>Date: {{ review.meeting_scheduled_for|date:"F j, Y" }}</li>
+    <li>Time: {{ review.meeting_scheduled_for|date:"g:i A" }}</li>
+</ul>
+<p>Please add this to your calendar and come prepared to discuss feedback and future goals.</p>
+

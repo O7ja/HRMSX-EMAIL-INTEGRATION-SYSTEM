@@ -1,0 +1,8 @@
+<h2>Appreciation Spotlight</h2>
+<p>Dear {{ record.employee.get_full_name|default:record.employee.username }},</p>
+<p>{{ record.manager.get_full_name|default:record.manager.username }} wanted to recognize your recent impact:</p>
+<blockquote style="border-left:4px solid #ddd;padding-left:12px;">
+    {{ record.message|linebreaks }}
+</blockquote>
+<p>Keep up the excellent work! A badge/certificate is attached when provided.</p>
+

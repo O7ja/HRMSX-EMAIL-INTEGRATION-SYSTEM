@@ -1,0 +1,9 @@
+<h2>Self-Assessment Form</h2>
+<p>The self-assessment for <strong>{{ cycle.name }}</strong> is now available.</p>
+<p>
+    <a href="{{ cycle.self_assessment_link }}" target="_blank" rel="noopener">
+        Complete your self-assessment here
+    </a>
+</p>
+<p>Please submit by <strong>{{ cycle.submission_deadline|date:"F j, Y" }}</strong>.</p>
+

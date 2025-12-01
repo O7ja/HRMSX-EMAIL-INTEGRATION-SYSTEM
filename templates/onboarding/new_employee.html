@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}New Employee Onboarding{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4">New Employee Onboarding</h2>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <form method="post" class="card shadow-sm p-4">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="id_employee" class="form-label">Select Employee</label>
+                    <select name="employee" id="id_employee" class="form-select" required>
+                        <option value="">-- Choose an employee --</option>
+                        {% for user in employees %}
+                        <option value="{{ user.id }}">
+                            {{ user.get_full_name }} ({{ user.username }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <small class="form-text text-muted">Select a new employee to create their onboarding record.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_start_date" class="form-label">Start Date</label>
+                    <input type="date" name="start_date" id="id_start_date" class="form-control" required>
+                    <small class="form-text text-muted">Employee's first day of work.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_department" class="form-label">Department</label>
+                    <input type="text" name="department" id="id_department" class="form-control"
+                        placeholder="e.g., Engineering, HR, Sales">
+                    <small class="form-text text-muted">Optional: Assign department if not already set.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Onboarding Tasks</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="send_welcome_email"
+                            id="id_send_welcome_email" checked>
+                        <label class="form-check-label" for="id_send_welcome_email">
+                            Send Welcome Email
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="create_checklist" id="id_create_checklist"
+                            checked>
+                        <label class="form-check-label" for="id_create_checklist">
+                            Create Onboarding Checklist
+                        </label>
+                    </div>
+                    <small class="form-text text-muted">Select which onboarding tasks to perform.</small>
+                </div>
+
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+                    <a href="{% url 'onboarding_status' %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Create Onboarding
+                    </button>
+                </div>
+            </form>
+
+            <!-- Info Box -->
+            <div class="alert alert-info mt-4">
+                <h5>Onboarding Process</h5>
+                <p>When you create a new employee onboarding record:</p>
+                <ul class="mb-0">
+                    <li>A welcome email will be sent to the employee (optional)</li>
+                    <li>An onboarding checklist will be created with assigned tasks</li>
+                    <li>Day 3, 5, and 7 checklist emails will be automatically sent</li>
+                    <li>Employee can track their onboarding progress</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: 1px solid #e3e6f0;
+        border-radius: 0.35rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2e59d9;
+    }
+
+    .alert-info {
+        background-color: #e7f3ff;
+        border-color: #b3d9ff;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Check-in - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4"> Daily Check-in</h2>
+
+            <div class="card">
+                <div class="card-body">
+                    {% if attendance and attendance.check_in_time %}
+                    <div class="alert alert-info">
+                        <strong>Already checked in!</strong><br>
+                        Check-in time: {{ attendance.check_in_time|time:"H:i:s" }}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-4">Click the button below to register your check-in for today.</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success btn-lg w-100">
+                            ✓ Check In Now
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Check-in Details</h5>
+                </div>
+                <div class="card-body">
+                    {% if attendance %}
+                    <dl class="row">
+                        <dt class="col-sm-5">Date:</dt>
+                        <dd class="col-sm-7">{{ attendance.attendance_date|date:"F d, Y" }}</dd>
+
+                        <dt class="col-sm-5">Check-in Time:</dt>
+                        <dd class="col-sm-7">
+                            {% if attendance.check_in_time %}
+                            {{ attendance.check_in_time|time:"H:i:s" }}
+                            {% else %}
+                            Not checked in yet
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-sm-5">Status:</dt>
+                        <dd class="col-sm-7">
+                            {% if attendance.status == 'present' %}
+                            <span class="badge bg-success">Present</span>
+                            {% elif attendance.status == 'late' %}
+                            <span class="badge bg-warning">Late</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ attendance.get_status_display }}</span>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    {% else %}
+                    <p class="text-muted">No check-in record yet for today.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

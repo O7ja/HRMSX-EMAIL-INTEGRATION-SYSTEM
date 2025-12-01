@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="mb-4"> My Profile</h2>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Username:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            {{ user.username }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Full Name:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            {{ user.get_full_name|default:"Not set" }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            {{ user.email }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Role:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            <span class="badge bg-info">{{ role_profile.get_role_display }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Department:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            {{ role_profile.department|default:"Not set" }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Phone:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            {{ role_profile.phone|default:"Not set" }}
+                        </div>
+                    </div>
+
+                    {% if employee_profile %}
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Employee ID:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            {{ employee_profile.employee_id }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Date of Joining:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            {{ employee_profile.date_of_joining|date:"M d, Y" }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Leave Balance:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            {{ employee_profile.leave_balance }} days
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+                            <a href="{% url 'profile' %}" class="btn btn-secondary">Refresh</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    {% if role_profile.role == 'employee' %}
+                    <a href="{% url 'employee_dashboard' %}" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                        Dashboard</a>
+                    <a href="{% url 'check_in' %}" class="btn btn-outline-success btn-sm w-100 mb-2">✓ Check In</a>
+                    <a href="{% url 'check_out' %}" class="btn btn-outline-danger btn-sm w-100 mb-2">✗ Check Out</a>
+                    <a href="{% url 'request_leave' %}" class="btn btn-outline-warning btn-sm w-100 mb-2"> Request
+                        Leave</a>
+                    {% elif role_profile.role == 'manager' %}
+                    <a href="{% url 'manager_dashboard' %}" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                        Dashboard</a>
+                    <a href="{% url 'leave_requests' %}" class="btn btn-outline-info btn-sm w-100 mb-2"> Leave
+                        Requests</a>
+                    {% elif role_profile.role == 'hr' %}
+                    <a href="{% url 'hr_dashboard' %}" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                        Dashboard</a>
+                    <a href="/admin/" class="btn btn-outline-secondary btn-sm w-100 mb-2"> Admin Panel</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

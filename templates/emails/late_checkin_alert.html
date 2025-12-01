@@ -1,0 +1,22 @@
+<html>
+
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #ffc107;"> Late Check-in Alert</h2>
+
+        <p>Hi {{ employee_name }},</p>
+
+        <p>You have checked in after 9:30 AM:</p>
+
+        <p style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #ffc107;">
+            <strong>Check-in Time:</strong> {{ check_in_time|time:"H:i:s" }}<br>
+            <strong>Status:</strong> <span style="color: #ffc107;">Late</span>
+        </p>
+
+        <p>This notification has also been sent to your manager for record purposes.</p>
+
+        <p>Please ensure to check in on time in the future.</p>
+    </div>
+</body>
+
+</html>

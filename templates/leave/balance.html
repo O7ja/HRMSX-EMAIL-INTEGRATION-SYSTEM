@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Leave Balance - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"> Leave Balance</h2>
+
+    <div class="card">
+        <div class="card-body">
+            {% if balances %}
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Leave Type</th>
+                        <th>Total Days</th>
+                        <th>Used Days</th>
+                        <th>Remaining Days</th>
+                        <th>Percentage Used</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for balance in balances %}
+                    <tr>
+                        <td><strong>{{ balance.leave_type.name }}</strong></td>
+                        <td>{{ balance.total_days }}</td>
+                        <td>{{ balance.used_days }}</td>
+                        <td>
+                            <span
+                                class="badge bg-{% if balance.remaining_days > 5 %}success{% elif balance.remaining_days > 2 %}warning{% else %}danger{% endif %}">
+                                {{ balance.remaining_days }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                    style="width: {{ balance.used_percentage }}%"
+                                    aria-valuenow="{{ balance.used_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ balance.used_percentage }}%
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No leave balance data available for this year.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <a href="{% url 'leave_requests' %}" class="btn btn-primary"> View Leave Requests</a>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{% url 'request_leave' %}" class="btn btn-success"> Request Leave</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .progress {
+        height: 25px;
+        background-color: #f0f0f0;
+    }
+</style>
+{% endblock %}

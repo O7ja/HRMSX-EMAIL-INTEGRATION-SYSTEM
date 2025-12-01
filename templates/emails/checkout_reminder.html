@@ -1,0 +1,29 @@
+<html>
+
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #dc3545;">Missing Check-out Reminder</h2>
+
+        <p>Hi {{ employee_name }},</p>
+
+        <p>You have checked in but not checked out yet. Please remember to check out before leaving the office.</p>
+
+        <p style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #dc3545;">
+            <strong>Check-in Time:</strong> {{ check_in_time|time:"H:i:s" }}<br>
+            <strong>Current Time:</strong> 6:00 PM
+        </p>
+
+        <p>
+            <a href="http://localhost:8000/attendance/check-out/" style="
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #dc3545;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+            ">✗ Check Out Now</a>
+        </p>
+    </div>
+</body>
+
+</html>

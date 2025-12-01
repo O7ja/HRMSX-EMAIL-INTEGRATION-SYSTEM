@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}HR Dashboard - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4"> HR Dashboard</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Employees</h6>
+                    <h2 class="text-primary">{{ total_employees }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-muted">Today's Present</h6>
+                    <h2 class="text-success">{{ present_count|default:0 }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-muted">Today's Late</h6>
+                    <h2 class="text-danger">{{ late_count|default:0 }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-muted">Pending Approvals</h6>
+                    <h2 class="text-warning">{{ pending_leaves.count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-muted">Admin Panel</h6>
+                    <a href="/admin/" class="btn btn-sm btn-secondary">Open</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Pending Leave Approvals</h5>
+                </div>
+                <div class="card-body">
+                    {% if pending_leaves %}
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for leave in pending_leaves|slice:":10" %}
+                            <tr>
+                                <td>{{ leave.employee.get_full_name }}</td>
+                                <td>{{ leave.leave_type.name }}</td>
+                                <td>{{ leave.get_duration_days }} days</td>
+                                <td>
+                                    <a href="{% url 'approve_leave' leave.id %}" class="btn btn-sm btn-success">✓</a>
+                                    <a href="{% url 'reject_leave' leave.id %}" class="btn btn-sm btn-danger">✗</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">No pending leave requests.</p>
+                    {% endif %}
+                    <a href="{% url 'leave_requests' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Onboarding & Offboarding</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'onboarding_status' %}" class="btn btn-outline-primary btn-block mb-2"
+                        style="width: 100%;">
+                        View Onboarding
+                    </a>
+                    <a href="{% url 'offboarding_status' %}" class="btn btn-outline-danger btn-block"
+                        style="width: 100%;">
+                        View Offboarding
+                    </a>
+                    <a href="{% url 'new_employee_onboarding' %}" class="btn btn-outline-success btn-block mt-2"
+                        style="width: 100%;">
+                        New Employee
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Reports & Analytics</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'attendance_report' %}" class="btn btn-outline-primary"> Attendance Report</a>
+                    <a href="{% url 'attendance_summary' %}" class="btn btn-outline-info"> Attendance Summary</a>
+                    <a href="{% url 'leave_calendar' %}" class="btn btn-outline-warning"> Leave Calendar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

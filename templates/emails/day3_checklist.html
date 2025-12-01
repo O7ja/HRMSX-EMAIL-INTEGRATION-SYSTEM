@@ -1,0 +1,29 @@
+<html>
+
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #667eea;">Day 3 Onboarding Checklist</h2>
+
+        <p>Hi {{ employee_name }},</p>
+
+        <p>Congratulations on completing your first two days! Here are your onboarding tasks for day 3:</p>
+
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
+            {% if checklist_items %}
+            <ul style="list-style: none; padding: 0;">
+                {% for item in checklist_items %}
+                <li style="padding: 8px 0; border-bottom: 1px solid #ddd;">
+                    ☐ {{ item.task }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No checklist items for today.</p>
+            {% endif %}
+        </div>
+
+        <p>Please complete these tasks and let your manager know when done.</p>
+    </div>
+</body>
+
+</html>

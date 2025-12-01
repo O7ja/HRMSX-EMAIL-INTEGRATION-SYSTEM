@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}Employee Dashboard - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4"> Employee Dashboard</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Check-in</h5>
+                    <a href="{% url 'check_in' %}" class="btn btn-success btn-lg">✓</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Check-out</h5>
+                    <a href="{% url 'check_out' %}" class="btn btn-danger btn-lg">✗</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Request Leave</h5>
+                    <a href="{% url 'request_leave' %}" class="btn btn-warning btn-lg"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Leave Balance</h5>
+                    <a href="{% url 'leave_balance' %}" class="btn btn-info btn-lg"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Performance Review</h5>
+                    <a href="{% url 'employee_reviews' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-chart-line"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Recent Attendance</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if attendance_records %}
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in attendance_records %}
+                                <tr>
+                                    <td>{{ record.attendance_date|date:"M d, Y" }}</td>
+                                    <td>{{ record.check_in_time|time:"H:i"|default:"-" }}</td>
+                                    <td>{{ record.check_out_time|time:"H:i"|default:"-" }}</td>
+                                    <td>
+                                        {% if record.status == 'present' %}
+                                        <span class="badge bg-success">Present</span>
+                                        {% elif record.status == 'late' %}
+                                        <span class="badge bg-warning">Late</span>
+                                        {% elif record.status == 'absent' %}
+                                        <span class="badge bg-danger">Absent</span>
+                                        {% else %}
+                                        <span class="badge bg-info">{{ record.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p class="text-muted">No attendance records this month.</p>
+                        {% endif %}
+                        <a href="{% url 'attendance_report' %}" class="btn btn-sm btn-outline-primary">View Full
+                            Report</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Leave Status</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if approved_leaves %}
+                        <div class="mb-3">
+                            <h6>Upcoming Approved Leaves:</h6>
+                            {% for leave in approved_leaves %}
+                            <div class="alert alert-info py-2">
+                                <strong>{{ leave.leave_type.name }}:</strong> {{ leave.start_date|date:"M d" }} - {{
+                                leave.end_date|date:"M d, Y" }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if pending_leaves %}
+                        <div>
+                            <h6>Pending Requests:</h6>
+                            {% for leave in pending_leaves %}
+                            <div class="alert alert-warning py-2">
+                                <strong>{{ leave.leave_type.name }}:</strong> {{ leave.start_date|date:"M d" }} - {{
+                                leave.end_date|date:"M d, Y" }}
+                                <br><small class="text-muted">Submitted {{ leave.created_at|timesince }} ago</small>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if not approved_leaves and not pending_leaves %}
+                        <p class="text-muted">No active leave requests.</p>
+                        {% endif %}
+                        <a href="{% url 'leave_requests' %}" class="btn btn-sm btn-outline-success">View All
+                            Requests</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

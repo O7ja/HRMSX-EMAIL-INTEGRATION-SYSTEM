@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}View Self-Assessment - HRMSX EMAIL INTEGRATION SYSTEM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="mb-2">Performance Review Details</h1>
+            <p class="text-muted mb-4">{{ cycle.name }} | {{ review.employee.get_full_name }}</p>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Review Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <strong>Employee:</strong> {{ review.employee.get_full_name }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Manager:</strong> {% if review.manager %}{{ review.manager.get_full_name }}{%
+                                else %}Not Assigned{% endif %}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Review Period:</strong><br />
+                                {{ cycle.start_date|date:"M d, Y" }} - {{ cycle.end_date|date:"M d, Y" }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <strong>Submission Deadline:</strong> {{ review.submission_deadline|date:"M d, Y" }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Current Status:</strong>
+                                {% if review.status == 'pending' %}
+                                <span class="badge bg-warning">Pending Self-Assessment</span>
+                                {% elif review.status == 'submitted' %}
+                                <span class="badge bg-info">Self-Assessment Submitted</span>
+                                {% elif review.status == 'review' %}
+                                <span class="badge bg-secondary">Manager Review In Progress</span>
+                                {% elif review.status == 'meeting' %}
+                                <span class="badge bg-secondary">Meeting Scheduled</span>
+                                {% elif review.status == 'completed' %}
+                                <span class="badge bg-success">Completed</span>
+                                {% elif review.status == 'overdue' %}
+                                <span class="badge bg-danger">Overdue</span>
+                                {% endif %}
+                            </p>
+                            {% if review.self_assessment_submitted %}
+                            <p class="mb-0">
+                                <strong>Submitted:</strong><br />
+                                {{ review.self_assessment_submitted_at|date:"M d, Y H:i" }}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if review.self_assessment_content %}
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Employee Self-Assessment</h5>
+                </div>
+                <div class="card-body">
+                    <div class="bg-light p-3 rounded">
+                        {{ review.self_assessment_content|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                Self-assessment has not been submitted yet.
+            </div>
+            {% endif %}
+
+            {% if review.review_summary %}
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Manager Review Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="bg-light p-3 rounded">
+                        {{ review.review_summary|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if review.goals_next_period %}
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Goals for Next Period</h5>
+                </div>
+                <div class="card-body">
+                    <div class="bg-light p-3 rounded">
+                        {{ review.goals_next_period|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                <a href="{% url 'employee_reviews' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Reviews
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

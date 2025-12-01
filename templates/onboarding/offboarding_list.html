@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Offboarding Status{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4">Offboarding Status</h2>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% if offboarding_list %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Employee</th>
+                            <th>Position</th>
+                            <th>Department</th>
+                            <th>Last Day</th>
+                            <th>Exit Email Sent</th>
+                            <th>Farewell Email Sent</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for offboarding in offboarding_list %}
+                        <tr>
+                            <td>
+                                <strong>{{ offboarding.employee.get_full_name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ offboarding.employee.email }}</small>
+                            </td>
+                            <td>{{ offboarding.employee.role_profile.role|title }}</td>
+                            <td>{{ offboarding.employee.role_profile.department|default:"N/A" }}</td>
+                            <td>
+                                <span class="badge bg-warning">
+                                    {{ offboarding.last_day|date:"M d, Y" }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if offboarding.exit_email_sent %}
+                                <span class="badge bg-success">✓ Sent</span>
+                                {% else %}
+                                <span class="badge bg-danger">✗ Not Sent</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if offboarding.farewell_email_sent %}
+                                <span class="badge bg-success">✓ Sent</span>
+                                {% else %}
+                                <span class="badge bg-danger">✗ Not Sent</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'offboarding_checklist' offboarding.id %}"
+                                    class="btn btn-sm btn-primary">
+                                    View Checklist
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                No offboarding records found.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .table {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .badge {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.6rem;
+    }
+</style>
+{% endblock %}

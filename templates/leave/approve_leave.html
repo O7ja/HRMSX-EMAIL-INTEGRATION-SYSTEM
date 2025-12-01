@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Approve Leave Request - HRMSX EMAIL INTEGRATION SYSTEM{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Approve Leave Request</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Leave Request Details</strong>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Employee:</strong><br>{{ leave_request.employee.get_full_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Leave Type:</strong><br>{{ leave_request.leave_type.name }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>From Date:</strong><br>{{ leave_request.from_date|date:"M d, Y" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>To Date:</strong><br>{{ leave_request.to_date|date:"M d, Y" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <p><strong>Duration:</strong><br>{{ leave_request.duration }} day(s)</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <p><strong>Reason:</strong></p>
+                        <p class="border-start ps-3">{{ leave_request.reason }}</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p><strong>Current Status:</strong><br>
+                            <span class="badge bg-warning">{{ leave_request.status|upper }}</span>
+                        </p>
+                    </div>
+
+                    <hr>
+
+                    <form method="POST" class="mt-4">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="approval_comment" class="form-label">Approval Comment (Optional)</label>
+                            <textarea class="form-control" id="approval_comment" name="approval_comment" rows="4"
+                                placeholder="Add any comments regarding this approval..."></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'leave_requests' %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" name="action" value="approve" class="btn btn-success">
+                                Approve Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">
+                        <span class="me-2"></span>Welcome Back-Please Login to Continue
+                    </h2>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                    </form>
+
+                    <hr>
+
+                    <p class="text-center text-muted small">
+                        Demo credentials:<br>
+                        Employee: emp1 / password123<br>
+                        Manager: manager1 / password123<br>
+                        HR: hr1 / password123
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

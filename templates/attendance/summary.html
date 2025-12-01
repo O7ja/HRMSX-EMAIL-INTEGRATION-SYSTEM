@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Attendance Summary - Email Integration System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"> Attendance Summary</h2>
+
+    <div class="row">
+        <!-- This Month Stats -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">This Month's Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-6 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Total Days</h6>
+                                <h3 class="text-primary">{{ month_stats.total }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Present</h6>
+                                <h3 class="text-success">{{ month_stats.present }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Late</h6>
+                                <h3 class="text-warning">{{ month_stats.late }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Absent</h6>
+                                <h3 class="text-danger">{{ month_stats.absent }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Half Day</h6>
+                                <h3 class="text-info">{{ month_stats.half_day }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- This Year Stats -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">This Year's Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-6 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Total Days</h6>
+                                <h3 class="text-primary">{{ year_stats.total }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Present</h6>
+                                <h3 class="text-success">{{ year_stats.present }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Late</h6>
+                                <h3 class="text-warning">{{ year_stats.late }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Absent</h6>
+                                <h3 class="text-danger">{{ year_stats.absent }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="stat-box">
+                                <h6 class="text-muted">Half Day</h6>
+                                <h3 class="text-info">{{ year_stats.half_day }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'attendance_report' %}" class="btn btn-primary">📋 View Detailed Report</a>
+    </div>
+</div>
+
+<style>
+    .stat-box {
+        padding: 15px;
+        border-radius: 8px;
+        background: #f8f9fa;
+    }
+</style>
+{% endblock %}

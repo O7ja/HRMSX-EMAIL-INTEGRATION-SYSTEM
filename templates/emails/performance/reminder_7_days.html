@@ -1,0 +1,5 @@
+<h2>Reminder: 7 Days Remaining</h2>
+<p>Hi {{ review.employee.get_full_name|default:review.employee.username }},</p>
+<p>There are seven days left to submit your self-assessment for <strong>{{ cycle.name }}</strong>.</p>
+<p>Need help? Contact your manager {{ manager.get_full_name|default:manager.username|default:"" }} or HR.</p>
+
